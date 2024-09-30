@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\ExpenseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\ProfileController;
 
@@ -19,4 +20,6 @@ Route::middleware(['custom-auth', 'custom-verified'])->group(function () {
         Route::put('/profile', 'update')->name('profile.update');
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
+
+    Route::resource('expenses', ExpenseController::class);
 });

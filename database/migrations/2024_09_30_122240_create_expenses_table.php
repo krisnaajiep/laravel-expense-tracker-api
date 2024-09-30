@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('amount', total: 10, places: 2);
             $table->string('category', length: 50);
             $table->text('description')->nullable();
-            $table->date('date');
+            $table->dateTime('date_time');
             $table->string('payment_method', length: 50);
             $table->timestamps();
         });

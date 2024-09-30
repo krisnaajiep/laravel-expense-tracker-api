@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Expense;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 
@@ -13,15 +14,9 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $expenses = Expense::filter(request(['start_date', 'end_date']))->latest()->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json(['expenses' => $expenses]);
     }
 
     /**
@@ -36,14 +31,6 @@ class ExpenseController extends Controller
      * Display the specified resource.
      */
     public function show(Expense $expense)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Expense $expense)
     {
         //
     }

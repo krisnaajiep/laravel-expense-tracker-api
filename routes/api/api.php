@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ExpenseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProfileController;
@@ -14,3 +15,5 @@ Route::middleware(['api', 'auth:api', 'api-custom-verified'])->group(function ()
         Route::delete('/profile', 'destroy');
     });
 });
+
+Route::apiResource('expenses', ExpenseController::class);
