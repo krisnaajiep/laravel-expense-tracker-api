@@ -61,7 +61,12 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $response = Http::post('http://expense-tracker-api.test/api/expenses', $request->all());
+
+        if ($response->status() === 422)
+            return back()->withErrors($response->json('errors'))->withInput();
+
+        return redirect(route('expenses.index'))->with(['status' => $response->json('message'), 'type' => 'success']);
     }
 
     /**
@@ -69,7 +74,9 @@ class ExpenseController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $response = Http::get('http://expense-tracker-api.test/api/expenses/' . $id);
+
+        return $response->object();
     }
 
     /**
@@ -77,7 +84,10 @@ class ExpenseController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('expenses.edit', [
+            'user' => session('user'),
+            'expense' => $this->show($id),
+        ]);
     }
 
     /**
@@ -85,7 +95,12 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $response = Http::put('http://expense-tracker-api.test/api/expenses/' . $id, $request->all());
+
+        if ($response->status() === 422)
+            return back()->withErrors($response->json('errors'))->withInput();
+
+        return back()->with(['status' => $response->json('message'), 'type' => 'success']);
     }
 
     /**
@@ -93,6 +108,8 @@ class ExpenseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $response = Http::delete('http://expense-tracker-api.test/api/expenses/' . $id);
+
+        return redirect(route('expenses.index'))->with(['status' => $response->json('message'), 'type' => 'success']);
     }
 }

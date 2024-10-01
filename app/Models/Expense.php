@@ -12,6 +12,17 @@ class Expense extends Model
     use HasFactory;
 
     /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
      * Scope a query to only include filter expenses.
      */
     public function scopeFilter(Builder $query, array $filters): void

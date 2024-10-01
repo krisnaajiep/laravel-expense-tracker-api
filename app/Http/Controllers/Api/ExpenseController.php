@@ -6,6 +6,7 @@ use App\Models\Expense;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
+use Illuminate\Support\Carbon;
 
 class ExpenseController extends Controller
 {
@@ -29,7 +30,16 @@ class ExpenseController extends Controller
      */
     public function store(StoreExpenseRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $validated['date_time'] = Carbon::parse($validated['date_time'])->format('Y-m-d H:i:s');
+        $validated['user_id'] = 1;
+
+        $data = Expense::create($validated);
+
+        return response()->json([
+            'message' => 'Data stored successfully',
+            'data' => $data,
+        ], 201);
     }
 
     /**
@@ -37,7 +47,7 @@ class ExpenseController extends Controller
      */
     public function show(Expense $expense)
     {
-        //
+        return response()->json($expense);
     }
 
     /**
@@ -45,7 +55,15 @@ class ExpenseController extends Controller
      */
     public function update(UpdateExpenseRequest $request, Expense $expense)
     {
-        //
+        $validated = $request->validated();
+        $validated['date_time'] = Carbon::parse($validated['date_time'])->format('Y-m-d H:i:s');
+
+        $data = Expense::where('id', $expense->id)->update($validated);
+
+        return response()->json([
+            'message' => 'Data updated successfully',
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -53,6 +71,11 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
-        //
+        $expense->delete();
+
+        return response()->json([
+            'message' => 'Data (id:' . $expense->id . ') deleted successfully',
+            'data' => $expense,
+        ]);
     }
 }

@@ -38,12 +38,11 @@
                         <td>{{ $expense->date_time }}</td>
                         <td class="text-center">{{ $expense->payment_method }}</td>
                         <td class="text-center">
-                            <a href="#" class="btn btn-primary btn-sm">View</a>
-                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="#" method="post" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
+                            <a href="{{ route('expenses.show', ['expense' => $expense->id]) }}"
+                                class="btn btn-primary btn-sm">View</a>
+                            <a href="{{ route('expenses.edit', ['expense' => $expense->id]) }}"
+                                class="btn btn-warning btn-sm">Edit</a>
+                            @include('expenses.includes.forms.delete.expense')
                         </td>
                     </tr>
                 @empty
