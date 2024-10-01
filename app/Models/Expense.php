@@ -36,15 +36,20 @@ class Expense extends Model
             }
         });
 
-        $query->when($filters['end_date'] ?? false, function (Builder $query, string $end_date) use ($filters) {
-            $end_date = Carbon::parse($end_date);
+        $query->when($filters['end_date'] ?? false, function (Builder $query, string $end_date) {
+            $query->where('date_time', '<', Carbon::parse($end_date));
+        });
 
-            $query->when($filters['start_date'] ?? false, function (Builder $query, string $start_date,) use ($end_date) {
-                $query->where('date_time', '>', Carbon::parse($start_date))
-                    ->where('date_time', '<', $end_date);
-            }, function () use ($query, $end_date) {
-                $query->where('date_time', '<', $end_date);
-            });
+        $query->when($filters['order_by_amount'] ?? false, function (Builder $query, string $order_by_amount) {
+            $query->orderBy('amount', $order_by_amount);
+        });
+
+        $query->when($filters['order_by_date'] ?? false, function (Builder $query, string $order_by_date) {
+            $query->orderBy('date_time', $order_by_date);
+        });
+
+        $query->when($filters['order_by_created_at'] ?? false, function (Builder $query, string $order_by_created_at) {
+            $query->orderBy('created_at', $order_by_created_at);
         });
     }
 }

@@ -14,9 +14,14 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenses = Expense::filter(request(['start_date', 'end_date']))->latest()->get();
+        $filter = Expense::filter(request(['start_date', 'end_date', 'order_by_amount', 'order_by_date', 'order_by_created_at']));
+        $total_amount = $filter->sum('amount');
+        $expenses = $filter->latest()->paginate(10)->withQueryString();
 
-        return response()->json(['expenses' => $expenses]);
+        return response()->json([
+            'total_amount' => $total_amount,
+            'expenses' => $expenses,
+        ]);
     }
 
     /**

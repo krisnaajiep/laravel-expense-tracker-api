@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Services\Web\FilterRequestString;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ExpenseController extends Controller
 {
@@ -17,14 +18,21 @@ class ExpenseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $response = Http::get('http://expense-tracker-api.test/api/expenses', [
-            'start_date' => request('start_date'),
-            'end_date' => request('end_date'),
-        ]);
+        $current_page = LengthAwarePaginator::resolveCurrentPage();
 
-        $expenses = collect($response->object()->expenses)->map(function ($expense) {
+        $request->merge(['page' => $current_page]);
+
+        $response = Http::get('http://expense-tracker-api.test/api/expenses', $request->all());
+
+        if ($response->status() === 500) abort(500);
+
+        $total_amount = number_format($response->json('total_amount'), 2, ',', '.');
+
+        $expenses = $response->object()->expenses;
+
+        $expenses_data = collect($expenses->data)->map(function ($expense) {
             $expense->amount = number_format($expense->amount, 2, ',', '.');
             $expense->date_time = Carbon::parse($expense->date_time)->locale('id')->translatedFormat('l, j F Y');
             return $expense;
@@ -32,10 +40,23 @@ class ExpenseController extends Controller
 
         $filter_request = $this->filterRequestString->generate(request('start_date'), request('end_date'));
 
+        $paginator = new LengthAwarePaginator(
+            $expenses->data,
+            $expenses->total,
+            $expenses->per_page,
+            $current_page,
+            ['path' => $request->url(), 'query' => $request->query()],
+        );
+
+        $start_number = ($paginator->currentPage() - 1) * $paginator->perPage() + 1;
+
         return view('expenses.index', [
             'user' => session('user'),
-            'expenses' => $expenses,
+            'total_amount' => $total_amount,
+            'expenses_data' => $expenses_data,
             'filter_request' => $filter_request,
+            'paginator' => $paginator,
+            'start_number' => $start_number,
         ]);
     }
 

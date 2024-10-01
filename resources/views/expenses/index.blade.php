@@ -8,45 +8,16 @@
             </div>
         @endsession
         <div class="row border-bottom pb-2 mb-2">
-            <div class="col-8 pt-2">
+            <div class="col pt-2">
                 <h5>Your Expenses {{ $filter_request }}</h5>
             </div>
-            <div class="col-4 text-end">
-                <div class="dropdown d-inline">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Filter
-                    </button>
-                    <ul class="dropdown-menu">
-                        <form action="{{ route('expenses.index') }}" method="GET">
-                            <li>
-                                <button class="dropdown-item" type="submit" name="start_date" value="past_week">
-                                    Past Week
-                                </button>
-                            </li>
-                            <li>
-                                <button class="dropdown-item" type="submit" name="start_date" value="last_month">
-                                    Last Month
-                                </button>
-                            </li>
-                            <li>
-                                <button class="dropdown-item" type="submit" name="start_date" value="last_3_months">
-                                    Last 3 Months
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                    data-bs-target="#customFilterModal">
-                                    Custom
-                                </button>
-                            </li>
-                        </form>
-                    </ul>
-                    @include('expenses.includes.custom-filter')
-                </div>
+            <div class="col text-end">
+                @include('expenses.includes.dropdowns.filters.sort-by')
+                @include('expenses.includes.dropdowns.filters.date-range')
                 <a href="#" class="btn btn-success">Add New Expense</a>
             </div>
         </div>
+        <p>Total Amount : Rp {{ $total_amount }}</p>
         <table class="table table-responsive">
             <thead>
                 <tr>
@@ -59,9 +30,9 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($expenses as $expense)
+                @forelse ($expenses_data as $expense)
                     <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
+                        <th scope="row">{{ $start_number + $loop->index }}.</th>
                         <td>Rp {{ $expense->amount }}</td>
                         <td>{{ $expense->category }}</td>
                         <td>{{ $expense->date_time }}</td>
@@ -82,5 +53,6 @@
                 @endforelse
             </tbody>
         </table>
+        {{ $paginator->links() }}
     </div>
 </x-layout>
