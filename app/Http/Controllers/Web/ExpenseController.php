@@ -5,58 +5,44 @@ namespace App\Http\Controllers\Web;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use App\Services\Web\DateRangeString;
 use Illuminate\Support\Facades\Http;
-use App\Services\Web\FilterRequestString;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ExpenseController extends Controller
 {
-    public function __construct(
-        protected FilterRequestString $filterRequestString
-    ) {}
-
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, DateRangeString $date_range_string)
     {
-        $current_page = LengthAwarePaginator::resolveCurrentPage();
-
-        $request->merge(['page' => $current_page]);
+        $request->merge(['page' => LengthAwarePaginator::resolveCurrentPage()]);
 
         $response = Http::get('http://expense-tracker-api.test/api/expenses', $request->all());
 
         if ($response->status() === 500) abort(500);
 
-        $total_amount = number_format($response->json('total_amount'), 2, ',', '.');
-
-        $expenses = $response->object()->expenses;
-
-        $expenses_data = collect($expenses->data)->map(function ($expense) {
+        $expenses_data = collect($response->object()->expenses->data)->map(function ($expense) {
             $expense->amount = number_format($expense->amount, 2, ',', '.');
-            $expense->date_time = Carbon::parse($expense->date_time)->locale('id')->translatedFormat('l, j F Y');
+            $expense->date_time = Carbon::parse($expense->date_time)->translatedFormat('l, j F Y');
             return $expense;
         });
 
-        $filter_request = $this->filterRequestString->generate(request('start_date'), request('end_date'));
-
         $paginator = new LengthAwarePaginator(
-            $expenses->data,
-            $expenses->total,
-            $expenses->per_page,
-            $current_page,
+            $response->object()->expenses->data,
+            $response->object()->expenses->total,
+            $response->object()->expenses->per_page,
+            LengthAwarePaginator::resolveCurrentPage(),
             ['path' => $request->url(), 'query' => $request->query()],
         );
 
-        $start_number = ($paginator->currentPage() - 1) * $paginator->perPage() + 1;
-
         return view('expenses.index', [
             'user' => session('user'),
-            'total_amount' => $total_amount,
+            'total_amount' => number_format($response->json('total_amount'), 2, ',', '.'),
             'expenses_data' => $expenses_data,
-            'filter_request' => $filter_request,
+            'date_range_string' => $date_range_string(request('start_date'), request('end_date')),
             'paginator' => $paginator,
-            'start_number' => $start_number,
+            'start_number' => ($paginator->currentPage() - 1) * $paginator->perPage() + 1,
         ]);
     }
 
@@ -65,7 +51,9 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        //
+        return view('expenses.create', [
+            'user' => session('user'),
+        ]);
     }
 
     /**

@@ -15,16 +15,9 @@ use Illuminate\Auth\Notifications\VerifyEmail;
 class RegisterController extends Controller
 {
     /**
-     * Create a new controller instance.
-     */
-    public function __construct(
-        protected VerificationUrl $verificationUrl,
-    ) {}
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, VerificationUrl $verification_url)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -39,8 +32,8 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        VerifyEmail::createUrlUsing(function (object $notifiable) use ($request) {
-            return $this->verificationUrl->generate($notifiable, $request->verification_url);
+        VerifyEmail::createUrlUsing(function (object $notifiable) use ($request, $verification_url) {
+            return $verification_url($notifiable, $request->verification_url);
         });
 
         event(new Registered($user));

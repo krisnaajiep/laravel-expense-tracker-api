@@ -4,9 +4,9 @@ namespace App\Services\Web;
 
 use Illuminate\Support\Carbon;
 
-class FilterRequestString
+class DateRangeString
 {
-  public function generate(?string $start_date, ?string $end_date): ?string
+  public function __invoke(?string $start_date, ?string $end_date): ?string
   {
     if (!is_null($end_date)) {
       $start_date = Carbon::parse($start_date)->format('j F Y');

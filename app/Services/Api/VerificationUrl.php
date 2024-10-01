@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\URL;
 
 class VerificationUrl
 {
-  public function generate(object $notifiable, string $verification_url): string
+  public function __invoke(object $notifiable, string $verification_url): string
   {
     $signedUrl = URL::temporarySignedRoute(
       'verification.verify',

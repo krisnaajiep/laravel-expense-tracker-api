@@ -9,12 +9,12 @@
         @endsession
         <div class="row border-bottom pb-2 mb-2">
             <div class="col pt-2">
-                <h5>Your Expenses {{ $filter_request }}</h5>
+                <h5>Your Expenses {{ $date_range_string }}</h5>
             </div>
             <div class="col text-end">
                 @include('expenses.includes.dropdowns.filters.sort-by')
                 @include('expenses.includes.dropdowns.filters.date-range')
-                <a href="#" class="btn btn-success">Add New Expense</a>
+                <a href="{{ route('expenses.create') }}" class="btn btn-success">Add New Expense</a>
             </div>
         </div>
         <p>Total Amount : Rp {{ $total_amount }}</p>
