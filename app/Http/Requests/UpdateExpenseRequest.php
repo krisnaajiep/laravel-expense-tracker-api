@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateExpenseRequest extends FormRequest
@@ -9,9 +10,11 @@ class UpdateExpenseRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return $this->user()->can('update', $this->expense);
+        return $this->user()->can('update', $this->expense)
+            ? Response::allow()
+            : Response::denyAsNotFound();
     }
 
     /**
