@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body text-start">
                 <form action="" method="get">
-                    @include('expenses.includes.forms.inputs.hidden-sort-by')
+                    @include('expenses.includes.forms.inputs.hidden.sort-by')
                     <div class="row">
                         <div class="col">
                             <label for="start_date" class="form-label">Start Date</label>

@@ -4,8 +4,9 @@
     <div class="row mb-3">
         <x-forms.input type="text" name="amount" class="col"
             value="{{ old('amount', $expense->amount) }}">Amount</x-forms.input>
-        <x-forms.input type="text" name="category" class="col"
-            value="{{ old('category', $expense->category) }}">Category</x-forms.input>
+        <x-forms.input type="text" name="category" class="col" value="{{ old('category', $expense->category) }}"
+            list="categoriesOptions">Category</x-forms.input>
+        @include('expenses.includes.forms.datalists.categories-options')
     </div>
     <x-forms.textarea name="description" class="mb-3"
         value="{{ old('description', $expense->description) }}">Description</x-forms.textarea>
@@ -14,8 +15,9 @@
             value="{{ old('date_time', $expense->date_time) }}">
             Date</x-forms.input>
         <x-forms.input type="text" name="payment_method" class="col"
-            value="{{ old('payment_method', $expense->payment_method) }}">
+            value="{{ old('payment_method', $expense->payment_method) }}" list="paymentMethodOptions">
             Payment Method</x-forms.input>
+        @include('expenses.includes.forms.datalists.payment-method-options')
     </div>
     <button type="submit" class="btn btn-warning">Update</button>
 </form>

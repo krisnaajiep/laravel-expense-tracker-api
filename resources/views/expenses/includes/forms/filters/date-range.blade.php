@@ -1,5 +1,5 @@
 <form action="{{ route('expenses.index') }}" method="GET">
-    @include('expenses.includes.forms.inputs.hidden-sort-by')
+    @include('expenses.includes.forms.inputs.hidden.sort-by')
     <li>
         <button class="dropdown-item {{ request('start_date') === 'past_week' ? 'active' : '' }}" type="submit"
             name="start_date" value="past_week">

@@ -3,8 +3,8 @@
         Sort By
     </button>
     <ul class="dropdown-menu">
-        @include('expenses.includes.forms.filters.sort-by-amount')
-        @include('expenses.includes.forms.filters.sort-by-date')
-        @include('expenses.includes.forms.filters.sort-by-created-at')
+        @include('expenses.includes.forms.filters.sort-by.amount')
+        @include('expenses.includes.forms.filters.sort-by.date')
+        @include('expenses.includes.forms.filters.sort-by.created-at')
     </ul>
 </div>

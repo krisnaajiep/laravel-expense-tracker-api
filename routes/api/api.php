@@ -14,6 +14,6 @@ Route::middleware(['api', 'auth:api', 'api-custom-verified'])->group(function ()
         Route::put('/profile', 'update');
         Route::delete('/profile', 'destroy');
     });
-});
 
-Route::apiResource('expenses', ExpenseController::class);
+    Route::apiResource('expenses', ExpenseController::class);
+});

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Expense;
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
-use Illuminate\Support\Carbon;
 
 class ExpenseController extends Controller
 {
@@ -15,7 +17,10 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $filter = Expense::filter(request(['start_date', 'end_date', 'order_by_amount', 'order_by_date', 'order_by_created_at']));
+        Gate::authorize('viewAny', Expense::class);
+
+        $filter = Expense::where('user_id', Auth::user()->id)->filter(request(['search', 'start_date', 'end_date', 'order_by_amount', 'order_by_date', 'order_by_created_at']));
+
         $total_amount = $filter->sum('amount');
         $expenses = $filter->latest()->paginate(10)->withQueryString();
 
@@ -32,7 +37,7 @@ class ExpenseController extends Controller
     {
         $validated = $request->validated();
         $validated['date_time'] = Carbon::parse($validated['date_time'])->format('Y-m-d H:i:s');
-        $validated['user_id'] = 1;
+        $validated['user_id'] = Auth::user()->id;
 
         $data = Expense::create($validated);
 
@@ -47,6 +52,8 @@ class ExpenseController extends Controller
      */
     public function show(Expense $expense)
     {
+        Gate::authorize('view', $expense);
+
         return response()->json($expense);
     }
 
@@ -71,6 +78,8 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
+        Gate::authorize('delete', $expense);
+
         $expense->delete();
 
         return response()->json([

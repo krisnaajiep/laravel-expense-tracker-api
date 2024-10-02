@@ -2,7 +2,7 @@
     <label for="{{ $name }}" class="form-label">{{ $slot }}</label>
     <input type="{{ $type }}" class="form-control @error($name) is-invalid @enderror`" id="{{ $name }}"
         name="{{ $name }}" placeholder="{{ $slot }}" aria-describedby="{{ $name }}Help"
-        value="{{ $value }}">
+        value="{{ $value }}" @if ($attributes->has('list')) list="{{ $list }}" @endif>
     @error($name)
         <div class="invalid-feedback">
             {{ $message }}

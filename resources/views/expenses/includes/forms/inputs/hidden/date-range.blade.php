@@ -7,3 +7,6 @@
 @if (request('custom'))
     <input type="hidden" name="custom" value="on">
 @endif
+@if (request('search'))
+    <input type="hidden" name="search" value="{{ request('search') }}">
+@endif

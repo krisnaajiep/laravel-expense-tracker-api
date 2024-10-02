@@ -27,6 +27,11 @@ class Expense extends Model
      */
     public function scopeFilter(Builder $query, array $filters): void
     {
+        $query->when($filters['search'] ?? false, function (Builder $query, string $search) {
+            $query->where('category', 'like', '%' . $search . '%')
+                ->orWhere('payment_method', 'like', '%' . $search . '%');
+        });
+
         $query->when($filters['start_date'] ?? false, function (Builder $query, string $start_date) {
             switch ($start_date) {
                 case 'past_week':

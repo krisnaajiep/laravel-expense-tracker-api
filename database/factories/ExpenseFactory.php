@@ -17,12 +17,12 @@ class ExpenseFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => 1,
+            'user_id' => fake()->randomElement([1, 2]),
             'amount' => fake()->randomNumber(2, true) . '000',
             'category' => fake()->randomElement(['Groceries', 'Leisure', 'Electronics', 'Utilities', 'Clothing', 'Health', 'Others']),
             'description' => fake()->paragraph(),
             'date_time' => fake()->dateTimeBetween(startDate: '-24 week'),
-            'payment_method' => 'Cash',
+            'payment_method' => fake()->randomElement(['Cash', 'Credit Card', 'Debit Card', 'Bank Transfer', 'E-Wallet', 'Mobile Payment', 'Cryptocurrency', 'Check']),
         ];
     }
 }

@@ -1,4 +1,4 @@
- <nav class="navbar navbar-expand-lg bg-body">
+ <nav class="navbar sticky-top navbar-expand-lg bg-body">
      <div class="container">
          <a class="navbar-brand" href="/dashboard">Dashboard</a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -16,6 +16,9 @@
                          href="{{ route('expenses.index') }}">Expenses</a>
                  </li>
              </ul>
+             @if (Request::is('expenses*'))
+                 @include('expenses.includes.forms.search')
+             @endif
              <li class="nav-item dropdown d-flex">
                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                      aria-expanded="false">

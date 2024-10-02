@@ -1,5 +1,5 @@
 <form action="{{ route('expenses.index') }}" method="GET">
-    @include('expenses.includes.forms.inputs.hidden-date-range')
+    @include('expenses.includes.forms.inputs.hidden.date-range')
     @if (request('order_by_amount'))
         <input type="hidden" name="order_by_amount" value="{{ request('order_by_amount') }}">
     @endif

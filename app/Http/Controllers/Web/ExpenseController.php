@@ -18,7 +18,7 @@ class ExpenseController extends Controller
     {
         $request->merge(['page' => LengthAwarePaginator::resolveCurrentPage()]);
 
-        $response = Http::get('http://expense-tracker-api.test/api/expenses', $request->all());
+        $response = Http::withToken(session('jwt_token'))->get('http://expense-tracker-api.test/api/expenses', $request->all());
 
         if ($response->status() === 500) abort(500);
 
@@ -61,7 +61,7 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        $response = Http::post('http://expense-tracker-api.test/api/expenses', $request->all());
+        $response = Http::withToken(session('jwt_token'))->post('http://expense-tracker-api.test/api/expenses', $request->all());
 
         if ($response->status() === 422)
             return back()->withErrors($response->json('errors'))->withInput();
@@ -74,7 +74,7 @@ class ExpenseController extends Controller
      */
     public function show(string $id)
     {
-        $response = Http::get('http://expense-tracker-api.test/api/expenses/' . $id);
+        $response = Http::withToken(session('jwt_token'))->get('http://expense-tracker-api.test/api/expenses/' . $id);
 
         return $response->object();
     }
@@ -95,7 +95,7 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $response = Http::put('http://expense-tracker-api.test/api/expenses/' . $id, $request->all());
+        $response = Http::withToken(session('jwt_token'))->put('http://expense-tracker-api.test/api/expenses/' . $id, $request->all());
 
         if ($response->status() === 422)
             return back()->withErrors($response->json('errors'))->withInput();
@@ -108,7 +108,7 @@ class ExpenseController extends Controller
      */
     public function destroy(string $id)
     {
-        $response = Http::delete('http://expense-tracker-api.test/api/expenses/' . $id);
+        $response = Http::withToken(session('jwt_token'))->delete('http://expense-tracker-api.test/api/expenses/' . $id);
 
         return redirect(route('expenses.index'))->with(['status' => $response->json('message'), 'type' => 'success']);
     }
