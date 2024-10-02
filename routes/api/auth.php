@@ -22,7 +22,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/me', 'me');
     });
 
-    Route::put('/update-password', PasswordUpdateController::class)->middleware('api-custom-verified');;
+    Route::put('/update-password', PasswordUpdateController::class)->middleware('api-custom-verified');
 });
 
 Route::post('/forgot-password', PasswordResetLinkController::class);
