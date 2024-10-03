@@ -19,3 +19,9 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
+/resources/views/*
+/routes/web
+/app/Http/Controllers/Web
+/app/Http/Middleware/Web
+/app/Services/Web
+/app/View
