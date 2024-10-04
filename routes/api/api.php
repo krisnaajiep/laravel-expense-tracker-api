@@ -9,7 +9,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::middleware(['api', 'auth:api', 'api-custom-verified'])->group(function () {
+Route::middleware(['api', 'auth:api', 'api-custom-verified', 'throttle:api'])->group(function () {
     Route::controller(ProfileController::class)->group(function () {
         Route::put('/profile', 'update');
         Route::delete('/profile', 'destroy');
