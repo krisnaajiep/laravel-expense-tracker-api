@@ -1,20 +1,16 @@
 <?php
 
-use App\Http\Middleware\Api\CustomEnsureEmailVerified as ApiCustomEnsureEmailVerified;
+use App\Http\Middleware\Api\CustomEnsureEmailVerified;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
-use App\Http\Middleware\Web\CustomAuthenticate;
-use App\Http\Middleware\Web\CustomEnsureEmailVerified;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\Web\CustomRedirectIfAuthenticated;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__ . '/../routes/web/web.php',
         api: __DIR__ . '/../routes/api/api.php',
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
@@ -22,18 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware(['api', 'throttle:api'])
                 ->prefix('api/auth')
                 ->group(base_path('routes/api/auth.php'));
-
-            Route::middleware('web')
-                ->prefix('auth')
-                ->group(base_path('routes/web/auth.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'custom-auth' => CustomAuthenticate::class,
-            'custom-guest' => CustomRedirectIfAuthenticated::class,
-            'custom-verified' => CustomEnsureEmailVerified::class,
-            'api-custom-verified' => ApiCustomEnsureEmailVerified::class,
+            'api-custom-verified' => CustomEnsureEmailVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
