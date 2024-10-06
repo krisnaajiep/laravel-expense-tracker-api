@@ -1,6 +1,6 @@
 # Laravel Expense Tracker API
 
-An API built with Laravel that allows users to manage their expenses. It supports categorization and filtering by amount, date, and creation time. The API uses JWT (JSON Web Token) authentication powered by `tymondesigns/jwt-auth`.
+An API built with Laravel that allows users to manage their expenses. It supports categorization and filtering by amount, date, and creation time. The API uses JWT (JSON Web Token) authentication powered by [tymondesigns/jwt-auth](https://github.com/tymondesigns/jwt-auth).
 
 ## **Getting started guide**
 
