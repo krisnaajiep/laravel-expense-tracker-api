@@ -9,7 +9,7 @@ To start using the Expense Tracker API, you need to -
 1. Clone the repository.
 
     ```bash
-    git clone https://github.com/krisnaajiep/expense-tracker-api.git
+    git clone https://github.com/krisnaajiep/laravel-expense-tracker-api.git
 
     ```
 
