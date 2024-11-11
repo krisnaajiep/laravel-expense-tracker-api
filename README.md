@@ -87,7 +87,6 @@ In case you have questions or need further assistance, you can refer to the foll
 
 -   [API Documentation](https://documenter.getpostman.com/view/37187730/2sAXxLCuMN)
 -   [Issues](https://github.com/krisnaajiep/laravel-expense-tracker-api/issues)
--   Email: [krisnaajiep@gmail.com](https://mailto:krisnaajiep@gmail.com)
 
 ##
 
