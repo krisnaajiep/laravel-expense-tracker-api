@@ -4,7 +4,7 @@ A RESTful API built with Laravel that allow users to create, read, update, and d
 
 ## **Getting started guide**
 
-To start using the Expense Tracker API, you need to -
+To start using this API, you need to -
 
 1. Clone the repository.
 
@@ -59,13 +59,13 @@ To start using the Expense Tracker API, you need to -
 
 ## Authentication
 
-The Expense Tracker API uses Bearer Token for authentication. You can generate a Expense Tracker Bearer Token by registering a new user.
+This API uses Bearer Token for authentication. You can generate an access token by registering a new user.
 
-You must include a Bearer Token in each request to the Expense Tracker API with the Authorization request header.
+You must include an access token in each request to the API with the Authorization request header.
 
 ### Authentication error response
 
-If a Bearer Token is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.
+If an access Token is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.
 
 ## HTTP Status Codes
 
