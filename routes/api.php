@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\RegisterAction;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegisterAction;
 
-Route::middleware(['api'])->group(function () {
-    Route::post('/register', RegisterAction::class);
-});
+Route::post('/register', RegisterAction::class);
+Route::post('/login', [AuthController::class, 'login']);
