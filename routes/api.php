@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterAction;
+use App\Http\Controllers\ExpenseController;
 
 Route::post('/register', RegisterAction::class);
 
@@ -14,3 +15,5 @@ Route::controller(AuthController::class)->group(function () {
         Route::post('/refresh', 'refresh');
     });
 });
+
+Route::apiResource('expenses', ExpenseController::class)->middleware('auth:api');
