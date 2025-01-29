@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Expense;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreExpenseRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreExpenseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->can('create', Expense::class);
     }
 
     /**
@@ -22,7 +23,9 @@ class StoreExpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'amount' => ['required', 'numeric', 'min:0'],
+            'category' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
         ];
     }
 }
