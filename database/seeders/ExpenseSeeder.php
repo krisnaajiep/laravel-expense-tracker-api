@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Expense;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ExpenseSeeder extends Seeder
 {
@@ -12,6 +14,8 @@ class ExpenseSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Expense::factory()
+            ->count(10)
+            ->create();
     }
 }
