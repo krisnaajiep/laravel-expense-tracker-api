@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Expense;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 
@@ -14,7 +15,17 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        //
+        Gate::authorize('viewAny', Expense::class);
+
+        $filter = Expense::where('user_id', Auth::user()->id)->filter(request(['category', 'start_date', 'end_date']));
+
+        $total_amount = $filter->sum('amount');
+        $expenses = $filter->latest()->paginate(10)->withQueryString();
+
+        return response()->json([
+            'total_amount' => $total_amount,
+            'expenses' => $expenses,
+        ]);
     }
 
     /**
