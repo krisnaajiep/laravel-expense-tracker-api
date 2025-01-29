@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
-use App\Models\Expense;
 
 class ExpenseController extends Controller
 {
@@ -21,7 +22,15 @@ class ExpenseController extends Controller
      */
     public function store(StoreExpenseRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $validated['user_id'] = Auth::user()->id;
+
+        $data = Expense::create($validated);
+
+        return response()->json([
+            'message' => 'Data stored successfully',
+            'data' => $data,
+        ], 201);
     }
 
     /**
