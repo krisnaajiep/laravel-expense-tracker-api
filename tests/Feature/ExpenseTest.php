@@ -113,4 +113,11 @@ class ExpenseTest extends TestCase
             ],
         ]);
     }
+
+    public function test_get_all_expenses_unauthenticated(): void
+    {
+        $response = $this->getJson('/api/expenses');
+
+        $response->assertUnauthorized()->assertJsonStructure(['message']);
+    }
 }
