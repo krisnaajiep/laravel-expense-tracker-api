@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('amount', total: 10, places: 2);
             $table->string('category', length: 50);
             $table->text('description')->nullable();
+            $table->dateTime('date_time');
             $table->timestamps();
         });
     }

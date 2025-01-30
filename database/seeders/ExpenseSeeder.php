@@ -14,8 +14,11 @@ class ExpenseSeeder extends Seeder
      */
     public function run(): void
     {
+        $user = User::factory()->create();
+
         Expense::factory()
             ->count(10)
+            ->for($user)
             ->create();
     }
 }

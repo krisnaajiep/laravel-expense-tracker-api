@@ -44,25 +44,25 @@ class Expense extends Model
         $query->when($filters['start_date'] ?? false, function (Builder $query, string $start_date) {
             switch ($start_date) {
                 case 'past_week':
-                    $query->where('created_at', '>', now()->subWeeks(1));
+                    $query->where('date_time', '>', now()->subWeeks(1));
                     break;
 
                 case 'last_month':
-                    $query->where('created_at', '>', now()->subMonths(1));
+                    $query->where('date_time', '>', now()->subMonths(1));
                     break;
 
                 case 'last_3_months':
-                    $query->where('created_at', '>', now()->subMonths(3));
+                    $query->where('date_time', '>', now()->subMonths(3));
                     break;
 
                 default:
-                    $query->where('created_at', '>', Carbon::parse($start_date));
+                    $query->where('date_time', '>', Carbon::parse($start_date));
                     break;
             }
         });
 
         $query->when($filters['end_date'] ?? false, function (Builder $query, string $end_date) {
-            $query->where('created_at', '<', Carbon::parse($end_date));
+            $query->where('date_time', '<', Carbon::parse($end_date));
         });
     }
 }

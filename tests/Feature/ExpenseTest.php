@@ -23,6 +23,7 @@ class ExpenseTest extends TestCase
             'amount' => 100,
             'category' => 'Food',
             'description' => 'Lunch',
+            'date_time' => now()->toDateTimeString(),
         ]);
 
         $response->assertCreated()->assertJsonStructure([
@@ -32,6 +33,7 @@ class ExpenseTest extends TestCase
                 'amount',
                 'category',
                 'description',
+                'date_time',
                 'created_at',
                 'updated_at',
             ],
@@ -49,9 +51,10 @@ class ExpenseTest extends TestCase
             'amount' => 'invalid',
             'category' => '',
             'description' => '',
+            'date_time' => 'invalid date time',
         ]);
 
-        $response->assertStatus(422)->assertJsonValidationErrors(['amount', 'category']);
+        $response->assertStatus(422)->assertJsonValidationErrors(['amount', 'category', 'date_time']);
     }
 
     /**
@@ -63,6 +66,7 @@ class ExpenseTest extends TestCase
             'amount' => 100,
             'category' => 'Food',
             'description' => 'Lunch',
+            'date_time' => now()->toDateTimeString(),
         ]);
 
         $response->assertUnauthorized()->assertJsonStructure(['message']);
@@ -75,7 +79,7 @@ class ExpenseTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Expense::factory()->count(5)->for($user)->create();
+        Expense::factory()->count(10)->for($user)->create();
 
         $response = $this->actingAs($user)->getJson('/api/expenses');
 
@@ -89,6 +93,7 @@ class ExpenseTest extends TestCase
                         'amount',
                         'category',
                         'description',
+                        'date_time',
                         'created_at',
                         'updated_at',
                     ],
