@@ -17,7 +17,10 @@ class ExpenseFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => 1,
+            'amount' => fake()->randomFloat(2, 1, 1000),
+            'category' => fake()->randomElement(['Groceries', 'Leisure', 'Electronics', 'Utilities', 'Clothing', 'Health', 'Others']),
+            'description' => fake()->paragraph(),
         ];
     }
 }
