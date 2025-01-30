@@ -119,10 +119,102 @@ class ExpenseTest extends TestCase
         ]);
     }
 
+    /**
+     * Test that all expenses cannot be retrieved with unauthenticated user.
+     */
     public function test_get_all_expenses_unauthenticated(): void
     {
         $response = $this->getJson('/api/expenses');
 
         $response->assertUnauthorized()->assertJsonStructure(['message']);
+    }
+
+    /**
+     * Test that a single expense can be retrieved successfully.
+     */
+    public function test_update_expense_successfully(): void
+    {
+        $user = User::factory()->create();
+
+        $expense = Expense::factory()->for($user)->create();
+
+        $response = $this->actingAs($user)->putJson("/api/expenses/{$expense->id}", [
+            'amount' => 200,
+            'category' => 'Transport',
+            'description' => 'Bus fare',
+            'date_time' => now()->toDateTimeString(),
+        ]);
+
+        $response->assertOk()->assertJsonStructure([
+            'message',
+            'data' => [
+                'id',
+                'user_id',
+                'amount',
+                'category',
+                'description',
+                'date_time',
+                'created_at',
+                'updated_at',
+            ],
+        ]);
+    }
+
+    /**
+     * Test that an expense cannot be updated with validation errors.
+     */
+    public function test_update_expense_validation_error(): void
+    {
+        $user = User::factory()->create();
+
+        $expense = Expense::factory()->for($user)->create();
+
+        $response = $this->actingAs($user)->putJson("/api/expenses/{$expense->id}", [
+            'amount' => 'invalid',
+            'category' => '',
+            'description' => '',
+            'date_time' => 'invalid date time',
+        ]);
+
+        $response->assertStatus(422)->assertJsonValidationErrors(['amount', 'category', 'date_time']);
+    }
+
+    /**
+     * Test that an expense cannot be updated with unauthenticated user.
+     */
+    public function test_update_expense_unauthenticated(): void
+    {
+        $user = User::factory()->create();
+
+        $expense = Expense::factory()->for($user)->create();
+
+        $response = $this->putJson("/api/expenses/{$expense->id}", [
+            'amount' => 200,
+            'category' => 'Transport',
+            'description' => 'Bus fare',
+            'date_time' => now()->toDateTimeString(),
+        ]);
+
+        $response->assertUnauthorized()->assertJsonStructure(['message']);
+    }
+
+    /**
+     * Test that an expense cannot be updated by an unauthorized user.
+     */
+    public function test_update_expense_unauthorized(): void
+    {
+        $authorizedUser = User::factory()->create();
+        $unauthorizedUser = User::factory()->create();
+
+        $expense = Expense::factory()->for($authorizedUser)->create();
+
+        $response = $this->actingAs($unauthorizedUser)->putJson("/api/expenses/{$expense->id}", [
+            'amount' => 200,
+            'category' => 'Transport',
+            'description' => 'Bus fare',
+            'date_time' => now()->toDateTimeString(),
+        ]);
+
+        $response->assertForbidden()->assertJsonStructure(['message']);
     }
 }
