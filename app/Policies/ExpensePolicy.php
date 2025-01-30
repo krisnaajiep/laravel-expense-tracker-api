@@ -44,7 +44,7 @@ class ExpensePolicy
      */
     public function delete(User $user, Expense $expense): bool
     {
-        return false;
+        return $user->id === $expense->user_id;
     }
 
     /**
