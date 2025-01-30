@@ -217,4 +217,47 @@ class ExpenseTest extends TestCase
 
         $response->assertForbidden()->assertJsonStructure(['message']);
     }
+
+    /**
+     * Test that an expense can be deleted successfully.
+     */
+    public function test_delete_expense_successfully(): void
+    {
+        $user = User::factory()->create();
+
+        $expense = Expense::factory()->for($user)->create();
+
+        $response = $this->actingAs($user)->deleteJson("/api/expenses/{$expense->id}");
+
+        $response->assertNoContent();
+    }
+
+    /**
+     * Test that an expense cannot be deleted with unauthenticated user.
+     */
+    public function test_delete_expense_unauthenticated(): void
+    {
+        $user = User::factory()->create();
+
+        $expense = Expense::factory()->for($user)->create();
+
+        $response = $this->deleteJson("/api/expenses/{$expense->id}");
+
+        $response->assertUnauthorized()->assertJsonStructure(['message']);
+    }
+
+    /**
+     * Test that an expense cannot be deleted by an unauthorized user.
+     */
+    public function test_delete_expense_unauthorized(): void
+    {
+        $authorizedUser = User::factory()->create();
+        $unauthorizedUser = User::factory()->create();
+
+        $expense = Expense::factory()->for($authorizedUser)->create();
+
+        $response = $this->actingAs($unauthorizedUser)->deleteJson("/api/expenses/{$expense->id}");
+
+        $response->assertForbidden()->assertJsonStructure(['message']);
+    }
 }
