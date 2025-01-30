@@ -2,9 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Expense;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Expense;
 
 class ExpensePolicy
 {
@@ -37,7 +36,7 @@ class ExpensePolicy
      */
     public function update(User $user, Expense $expense): bool
     {
-        return false;
+        return $user->id === $expense->user_id;
     }
 
     /**
