@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreExpenseRequest;
@@ -57,7 +58,19 @@ class ExpenseController extends Controller
      */
     public function update(UpdateExpenseRequest $request, Expense $expense)
     {
-        //
+        $validated = $request->validated();
+        $validated['date_time'] = Carbon::parse($validated['date_time'])->format('Y-m-d H:i:s');
+
+        $update = Expense::where('id', $expense->id)->update($validated);
+
+        if ($update) {
+            $data = Expense::find($expense->id);
+        }
+
+        return response()->json([
+            'message' => 'Data updated successfully',
+            'data' => $data,
+        ]);
     }
 
     /**
