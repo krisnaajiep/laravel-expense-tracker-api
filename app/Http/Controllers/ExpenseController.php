@@ -78,6 +78,10 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
-        //
+        Gate::authorize('delete', $expense);
+
+        $expense->delete();
+
+        return response()->json(status: 204);
     }
 }
