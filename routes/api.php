@@ -16,4 +16,4 @@ Route::controller(AuthController::class)->group(function () {
     });
 });
 
-Route::apiResource('expenses', ExpenseController::class)->except('show')->middleware('auth:api');
+Route::apiResource('expenses', ExpenseController::class)->except('show')->middleware(['auth:api', 'throttle:api']);
