@@ -10,6 +10,7 @@
 - [Setup](#setup)
 - [Usage](#usage)
 - [Authentication](#authentication)
+- [Rate and Usage Limits](#rate-and-usage-limits)
 - [HTTP Response Codes](#http-response-codes)
 - [Project Status](#project-status)
 - [Acknowledgements](#acknowledgements)
@@ -22,6 +23,7 @@ Laravel Expense Tracker API is a simple RESTful API that allow users to create, 
 
 - PHP - version 8.4.1
 - MySQL - version 8.0.4
+- Redis - version 7.4.2
 - [Laravel](https://www.laravel.com/) 11
 
 ## Features
@@ -40,6 +42,7 @@ To run this CLI tool, you’ll need:
 
 - **PHP**: Version 8.4 or newer
 - **MySQL**: Version 8.0 or newer
+- **Redis**: Version 7.4 or newer
 - **Composer**: Version 2.7 or newer
 
 How to install:
@@ -378,6 +381,18 @@ You must include an access token in each request to the API with the Authorizati
 
 If an access token is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.
 
+## Rate and Usage Limits
+
+API access rate limits apply at a per-API key basis in unit time. The limit is 60 requests per minute. Also, depending on your plan, you may have usage limits. If you exceed either limit, your request will return an HTTP 429 Too Many Requests status code.
+
+Each API response returns the following set of headers to help you identify your use status:
+
+| Header                  | Description                                                                       |
+| ----------------------- | --------------------------------------------------------------------------------- |
+| `X-RateLimit-Limit`     | The maximum number of requests that the consumer is permitted to make per minute. |
+| `X-RateLimit-Remaining` | The number of requests remaining in the current rate limit window.                |
+| `X-RateLimit-Reset`     | The time at which the current rate limit window resets in UTC epoch seconds.      |
+
 ## HTTP Response Codes
 
 The following status codes are returned by the API depending on the success or failure of the request.
@@ -390,6 +405,7 @@ The following status codes are returned by the API depending on the success or f
 | 403 Forbidden             | Access to the requested resource is forbidden.                                               |
 | 404 Not Found             | The requested resource was not found.                                                        |
 | 422 Unprocessable Content | The server understands the request, but cannot process it due to a validation error          |
+| 429 Too Many Requests     | The user has sent too many requests in a given amount of time ("rate limiting").             |
 | 500 Internal Server Error | An unexpected server error occurred.                                                         |
 
 ## Project Status
